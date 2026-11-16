@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependencias
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck nftables dnsmasq-base
+      - name: ShellCheck
+        run: shellcheck -x anon-up.sh anon-down.sh anon-status.sh lib/*.sh tests/*.sh
+      - name: Testes
+        run: bash tests/run-tests.sh
